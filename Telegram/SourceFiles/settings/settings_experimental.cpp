@@ -7,6 +7,7 @@ https://github.com/telegramdesktop/tdesktop/blob/master/LEGAL
 */
 #include "settings/settings_experimental.h"
 
+#include "data/data_stories.h"
 #include "data/components/passkeys.h"
 #include "main/main_session.h"
 #include "ui/boxes/confirm_box.h"
@@ -203,6 +204,7 @@ void SetupExperimental(
 			rpl::duplicate(reloadOptionsRequests));
 	};
 
+	addToggle(Data::kOptionDisableStories);
 	addToggle(ChatHelpers::kOptionTabbedPanelShowOnClick);
 	addToggle(Dialogs::kOptionForumHideChatsList);
 	addToggle(Core::kOptionFractionalScalingEnabled);

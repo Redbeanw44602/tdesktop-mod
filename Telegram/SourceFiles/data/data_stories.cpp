@@ -7,6 +7,8 @@ https://github.com/telegramdesktop/tdesktop/blob/master/LEGAL
 */
 #include "data/data_stories.h"
 
+#include "api/api_report.h"
+#include "base/options.h"
 #include "base/unixtime.h"
 #include "apiwrap.h"
 #include "core/application.h"
@@ -48,6 +50,13 @@ constexpr auto kPollViewsInterval = 10 * crl::time(1000);
 constexpr auto kPollingViewsPerPage = Story::kRecentViewersMax;
 
 using UpdateFlag = StoryUpdate::Flag;
+
+base::options::toggle DisableStories({
+	.id = kOptionDisableStories,
+	.name = "Disable stories",
+	.description = "",
+	.defaultValue = false,
+});
 
 [[nodiscard]] std::optional<StoryMedia> ParseMedia(
 		not_null<PeerData*> peer,
@@ -158,6 +167,8 @@ std::vector<StoryId> RespectingPinned(const StoriesIds &ids) {
 	}
 	return result;
 }
+
+const char kOptionDisableStories[] = "disable-stories";
 
 StoriesSourceInfo StoriesSource::info() const {
 	return {
@@ -426,6 +437,9 @@ void Stories::clearArchive(not_null<PeerData*> peer) {
 void Stories::parseAndApply(
 		const MTPPeerStories &stories,
 		ParseSource source) {
+	if (DisableStories.value()) {
+		return;
+	}
 	const auto &data = stories.data();
 	const auto peerId = peerFromMTP(data.vpeer());
 	const auto already = _readTill.find(peerId);
@@ -711,6 +725,9 @@ void Stories::savedStateChanged(not_null<Story*> story) {
 }
 
 void Stories::loadMore(StorySourcesList list) {
+	if (DisableStories.value()) {
+		return;
+	}
 	const auto index = static_cast<int>(list);
 	if (_loadMoreRequestId[index] || _sourcesLoaded[index]) {
 		return;
