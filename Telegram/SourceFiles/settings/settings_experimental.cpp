@@ -8,6 +8,7 @@ https://github.com/telegramdesktop/tdesktop/blob/master/LEGAL
 #include "settings/settings_experimental.h"
 
 #include "settings/settings_common.h"
+#include "data/data_stories.h"
 #include "data/components/passkeys.h"
 #include "ui/layers/generic_box.h"
 #include "main/main_session.h"
@@ -460,6 +461,12 @@ void SetupExperimental(
 				Core::kOptionDeadlockDetector,
 				Webview::kOptionWebviewDebugEnabled,
 				Webview::kOptionWebviewLegacyEdge,
+			}
+		},
+		{
+			u"Other"_q,
+			{
+				Data::kOptionDisableStories,
 			}
 		},
 	};
