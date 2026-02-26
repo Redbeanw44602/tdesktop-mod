@@ -817,18 +817,7 @@ void HistoryInner::setupSwipeReplyAndBack() {
 }
 
 bool HistoryInner::hasSelectRestriction() const {
-	if (_chooseForReportReason.has_value()) {
-		return false;
-	} else if (session().frozen()) {
-		return true;
-	} else if (!_sharingDisallowed.current()) {
-		return false;
-	} else if (const auto chat = _peer->asChat()) {
-		return !chat->canDeleteMessages();
-	} else if (const auto channel = _peer->asChannel()) {
-		return !channel->canDeleteMessages();
-	}
-	return true;
+	return false;
 }
 
 void HistoryInner::messagesReceived(
@@ -3831,12 +3820,12 @@ void HistoryInner::showContextMenu(QContextMenuEvent *e, bool showFromTouch) {
 }
 
 bool HistoryInner::hasCopyRestriction(HistoryItem *item) const {
-	return !_peer->allowsForwarding() || (item && item->forbidsForward());
+	return false;
 }
 
 bool HistoryInner::hasCopyMediaRestriction(
 		not_null<HistoryItem*> item) const {
-	return hasCopyRestriction(item) || item->forbidsSaving();
+	return false;
 }
 
 bool HistoryInner::showCopyRestriction(HistoryItem *item) {
@@ -3864,17 +3853,7 @@ bool HistoryInner::showCopyMediaRestriction(not_null<HistoryItem*> item) {
 }
 
 bool HistoryInner::hasCopyRestrictionForSelected() const {
-	if (hasCopyRestriction()) {
-		return true;
-	}
-	for (const auto &item : _selected) {
-		if (item && item->forbidsForward()) {
-			return true;
-		}
-	}
-	return hasSelectedText()
-		&& _selectedTextItem
-		&& _selectedTextItem->forbidsForward();
+	return false;
 }
 
 bool HistoryInner::showCopyRestrictionForSelected() {
