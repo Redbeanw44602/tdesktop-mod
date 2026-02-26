@@ -38,6 +38,8 @@ class Story;
 struct StoryAlbum;
 class StoryPreload;
 
+extern const char kOptionDisableStories[];
+
 struct StoriesIds {
 	std::vector<StoryId> list; // flat_set<int, greater> for saved/archive.
 	std::vector<StoryId> pinnedToTop;
