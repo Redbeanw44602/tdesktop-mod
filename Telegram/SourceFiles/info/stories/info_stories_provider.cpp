@@ -75,12 +75,7 @@ Type Provider::type() {
 }
 
 bool Provider::hasSelectRestriction() {
-	if (_peer->session().frozen()) {
-		return true;
-	} else if (const auto channel = _peer->asChannel()) {
-		return !channel->canEditStories() && !channel->canDeleteStories();
-	}
-	return !_peer->isSelf();
+	return false;
 }
 
 rpl::producer<bool> Provider::hasSelectRestrictionChanges() {
